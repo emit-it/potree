@@ -2,6 +2,7 @@
 import * as THREE from "../../../../libs/three.js/build/three.module.js";
 import {PointAttribute, PointAttributes, PointAttributeTypes} from "../../../loader/PointAttributes.js";
 import {OctreeGeometry, OctreeGeometryNode} from "./OctreeGeometry.js";
+import {XHRFactory} from '../../../XHRFactory.js';
 
 // let loadedNodes = new Set();
 
@@ -50,6 +51,7 @@ export class NodeLoader{
 					headers: {
 						'content-type': 'multipart/byteranges',
 						'Range': `bytes=${first}-${last}`,
+						...XHRFactory.getCustomHeadersForFetch(),
 					},
 				});
 
@@ -247,6 +249,7 @@ export class NodeLoader{
 			headers: {
 				'content-type': 'multipart/byteranges',
 				'Range': `bytes=${first}-${last}`,
+				...XHRFactory.getCustomHeadersForFetch(),
 			},
 		});
 
@@ -379,7 +382,11 @@ export class OctreeLoader{
 
 	static async load(url){
 
-		let response = await fetch(url);
+		let response = await fetch(url, {
+			headers: {
+				...XHRFactory.getCustomHeadersForFetch(),
+			}
+		});
 		let metadata = await response.json();
 
 		let attributes = OctreeLoader.parseAttributes(metadata.attributes);
