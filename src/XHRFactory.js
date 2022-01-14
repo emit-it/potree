@@ -2,9 +2,7 @@
 const XHRFactory = {
 	config: {
 		withCredentials: false,
-		customHeaders: [
-			{ header: null, value: null }
-		],
+		customHeaders: [],
 	},
 
 	createXMLHttpRequest: function () {
