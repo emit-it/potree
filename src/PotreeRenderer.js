@@ -1072,7 +1072,11 @@ export class Renderer {
 
 				const vnt = material.visibleNodesTexture;
 				const data = vnt.image.data;
-				data.set(visibilityTextureData.data);
+				if (visibilityTextureData.data.length <= data.length) {
+					data.set(visibilityTextureData.data);
+				} else {
+					data.set(visibilityTextureData.data.slice(0, data.length));
+				}
 				vnt.needsUpdate = true;
 
 			}
