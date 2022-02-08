@@ -35,11 +35,11 @@ export class NodeLoader{
 
 			let {byteOffset, byteSize} = node;
 
-
-			let urlOctree = `${this.url}/../octree.bin`;
-
 			let first = byteOffset;
 			let last = byteOffset + byteSize - 1n;
+
+			let range = `bytes=${first}-${last}`;
+			let urlOctree = `${this.url}/../octree.bin?${range}`;
 
 			let buffer;
 
@@ -50,7 +50,7 @@ export class NodeLoader{
 				let response = await fetch(urlOctree, {
 					headers: {
 						'content-type': 'multipart/byteranges',
-						'Range': `bytes=${first}-${last}`,
+						'Range': range,
 						...XHRFactory.getCustomHeadersForFetch(),
 					},
 				});
@@ -240,15 +240,17 @@ export class NodeLoader{
 	async loadHierarchy(node){
 
 		let {hierarchyByteOffset, hierarchyByteSize} = node;
-		let hierarchyPath = `${this.url}/../hierarchy.bin`;
 		
 		let first = hierarchyByteOffset;
 		let last = first + hierarchyByteSize - 1n;
 
+		let range = `bytes=${first}-${last}`;
+		let hierarchyPath = `${this.url}/../hierarchy.bin?${range}`;
+
 		let response = await fetch(hierarchyPath, {
 			headers: {
 				'content-type': 'multipart/byteranges',
-				'Range': `bytes=${first}-${last}`,
+				'Range': range,
 				...XHRFactory.getCustomHeadersForFetch(),
 			},
 		});
