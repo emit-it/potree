@@ -35,7 +35,7 @@ export const Features = (function () {
 			isSupported: function () {
 				let supported = true;
 
-				supported = supported && gl.getExtension('EXT_frag_depth');
+				supported = false;
 				supported = supported && gl.getParameter(gl.MAX_VARYING_VECTORS) >= 8;
 
 				return supported;
@@ -45,7 +45,7 @@ export const Features = (function () {
 			isSupported: function () {
 				let supported = true;
 
-				supported = supported && gl.getExtension('EXT_frag_depth');
+				supported = false;
 				supported = supported && gl.getExtension('OES_texture_float');
 				supported = supported && gl.getParameter(gl.MAX_VARYING_VECTORS) >= 8;
 
@@ -57,7 +57,7 @@ export const Features = (function () {
 			isSupported: function () {
 				let supported = true;
 
-				supported = supported && gl.getExtension('EXT_frag_depth');
+				supported = false;
 				supported = supported && gl.getExtension('OES_texture_float');
 				supported = supported && gl.getParameter(gl.MAX_VARYING_VECTORS) >= 8;
 

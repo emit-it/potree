@@ -2,9 +2,7 @@
 const XHRFactory = {
 	config: {
 		withCredentials: false,
-		customHeaders: [
-			{ header: null, value: null }
-		]
+		customHeaders: [],
 	},
 
 	createXMLHttpRequest: function () {
@@ -26,6 +24,14 @@ const XHRFactory = {
 		}
 
 		return xhr;
+	},
+
+	getCustomHeadersForFetch() {
+		const headers = {};
+		this.config.customHeaders.forEach((customHeader) => {
+			headers[customHeader.header] = customHeader.value;
+		})
+		return headers;
 	}
 };
 

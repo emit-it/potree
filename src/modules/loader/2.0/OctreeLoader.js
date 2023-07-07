@@ -2,6 +2,7 @@
 import * as THREE from "../../../../libs/three.js/build/three.module.js";
 import {PointAttribute, PointAttributes, PointAttributeTypes} from "../../../loader/PointAttributes.js";
 import {OctreeGeometry, OctreeGeometryNode} from "./OctreeGeometry.js";
+import {XHRFactory} from '../../../XHRFactory.js';
 
 // let loadedNodes = new Set();
 
@@ -34,11 +35,11 @@ export class NodeLoader{
 
 			let {byteOffset, byteSize} = node;
 
-
-			let urlOctree = `${this.url}/../octree.bin`;
-
 			let first = byteOffset;
 			let last = byteOffset + byteSize - 1n;
+
+			let range = `bytes=${first}-${last}`;
+			let urlOctree = `${this.url}/../octree.bin?${range}`;
 
 			let buffer;
 
@@ -49,7 +50,8 @@ export class NodeLoader{
 				let response = await fetch(urlOctree, {
 					headers: {
 						'content-type': 'multipart/byteranges',
-						'Range': `bytes=${first}-${last}`,
+						'Range': range,
+						...XHRFactory.getCustomHeadersForFetch(),
 					},
 				});
 
@@ -192,6 +194,13 @@ export class NodeLoader{
 				current.byteSize = byteSize;
 				current.numPoints = numPoints;
 			}
+
+			if(current.byteSize === 0n){
+				// workaround for issue #1125
+				// some inner nodes erroneously report >0 points even though have 0 points
+				// however, they still report a byteSize of 0, so based on that we now set node.numPoints to 0
+				current.numPoints = 0;
+			}
 			
 			current.nodeType = type;
 
@@ -238,15 +247,18 @@ export class NodeLoader{
 	async loadHierarchy(node){
 
 		let {hierarchyByteOffset, hierarchyByteSize} = node;
-		let hierarchyPath = `${this.url}/../hierarchy.bin`;
 		
 		let first = hierarchyByteOffset;
 		let last = first + hierarchyByteSize - 1n;
 
+		let range = `bytes=${first}-${last}`;
+		let hierarchyPath = `${this.url}/../hierarchy.bin?${range}`;
+
 		let response = await fetch(hierarchyPath, {
 			headers: {
 				'content-type': 'multipart/byteranges',
-				'Range': `bytes=${first}-${last}`,
+				'Range': range,
+				...XHRFactory.getCustomHeadersForFetch(),
 			},
 		});
 
@@ -379,7 +391,11 @@ export class OctreeLoader{
 
 	static async load(url){
 
-		let response = await fetch(url);
+		let response = await fetch(url, {
+			headers: {
+				...XHRFactory.getCustomHeadersForFetch(),
+			}
+		});
 		let metadata = await response.json();
 
 		let attributes = OctreeLoader.parseAttributes(metadata.attributes);
