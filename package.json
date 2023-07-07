@@ -16,10 +16,13 @@
     "tool"
   ],
   "main": "./build/potree/potree.js",
+  "types": "./build/@types",
   "scripts": {
     "start": "gulp watch",
     "build": "gulp build pack",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "build-types": "gulp build-types",
+    "tsc": "tsc"
   },
   "dependencies": {
     "gulp": "^4.0.2",
@@ -30,5 +33,11 @@
     "through": "~2.3.4"
   },
   "author": "Markus Schütz",
-  "license": "BSD-2-CLAUSE"
+  "license": "BSD-2-CLAUSE",
+  "devDependencies": {
+    "gulp-exec": "^5.0.0",
+    "gulp-run": "^1.7.1",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "typescript": "^5.1.6"
+  }
 }

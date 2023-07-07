@@ -2,6 +2,7 @@
 const path = require('path');
 const gulp = require('gulp');
 const exec = require('child_process').exec;
+const run = require('gulp-run');
 
 const fs = require("fs");
 const fsp = fs.promises;
@@ -156,6 +157,13 @@ gulp.task("shaders", async function(){
 		fs.mkdirSync("build/shaders");
 	}
 	fs.writeFileSync(targetPath, content, {flag: "w"});
+});
+
+gulp.task('build-types', function() {
+	return gulp.src(['src/**/*.js','src/**/*.map'])
+    .pipe(run('npm run tsc'))
+    .pipe(gulp.dest('./build/@types'))
+    .pipe(connect.reload())
 });
 
 gulp.task('build', 
