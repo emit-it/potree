@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": false,
+    "declarationDir": "build/@types",
+    "allowJs": true,
+    "checkJs": false,
+    "emitDeclarationOnly": true,
+    "outDir": "build",
+    "rootDir": "src"
+  },
+  "include": ["."],
+  "exclude": [
+    "node_modules",
+    "libs",
+    ".git",
+    ".github",
+    "examples",
+    "docs",
+    "pointclouds",
+    "resources",
+    ".vscode"
+  ]
+}
